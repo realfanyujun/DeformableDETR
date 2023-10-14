@@ -110,8 +110,18 @@ def resize(image, target, size, max_size=None):
         else:
             return get_size_with_aspect_ratio(image_size, size, max_size)
 
-    size = get_size(image.size, size, max_size)
-    rescaled_image = F.resize(image, size)
+
+    if int(image.size[0]) == 960 and int(image.size[1]) == 540:
+        pre_scaled_image = F.resize(image, (540, 1024))
+        print("Resized image from width 960 to width 1024")
+    else:
+        pre_scaled_image = image
+        
+    #size = get_size(image.size, size, max_size)
+    size = get_size(pre_scaled_image.size, size, max_size)
+		
+    #rescaled_image = F.resize(image, size)
+    rescaled_image = F.resize(pre_scaled_image, size)
 
     if target is None:
         return rescaled_image, None
